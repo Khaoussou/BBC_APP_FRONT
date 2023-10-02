@@ -1,0 +1,175 @@
+<div class="p-10 mt-16 h-full justify-center flex items-center bg-gray-200">
+  <div
+    class="border-solid w-[70vw] rounded border-2 border-gray-300 bg-gray-300"
+  >
+    <div class="px-3 py-4 text-lg">Nouveau produit</div>
+    <hr class="bg-slate-500 h-0.5" />
+    <div class="p-9">
+      <form [formGroup]="form" action="" class="py-4">
+        <div class="flex justify-evenly text-lg">
+          <div class="flex flex-col space-y-4">
+            <div class="flex flex-col">
+              <label for="">Article</label>
+              <input
+                (input)="search($event)"
+                formControlName="libelle"
+                type="text"
+                class="w-96 rounded-lg"
+              />
+            </div>
+            <div class="flex flex-col">
+              <label for="">Marque</label>
+              <select
+                formControlName="marque_id"
+                name=""
+                id=""
+                class="w-96 rounded-lg"
+              >
+                <option
+                  *ngFor="let marque of marques"
+                  value="{{ marque.id }}"
+                  class=""
+                >
+                  {{ marque.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="flex flex-col space-y-4">
+            <div class="flex space-x-9">
+              <div class="flex flex-col">
+                <label for="">Prix d'achat</label>
+                <input
+                  formControlName="prix_unitaire"
+                  type="number"
+                  min="0"
+                  class="rounded-lg w-44"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label for="">Quantité stock</label>
+                <input
+                  formControlName="quantite"
+                  type="number"
+                  min="0"
+                  class="rounded-lg w-44"
+                />
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label for="">Catégorie</label>
+              <select name="" id="" class="w-96 rounded-lg">
+                <option value="">Choisir une catégorie</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="flex relative justify-center items-center py-20 h-28">
+          <div
+            class="absolute rounded-xl border-blue-500 border-2 bg-slate-200 p-4"
+          >
+            <h4>CODE PRODUIT</h4>
+            <input
+              formControlName="code"
+              type="text"
+              placeholder="00000000"
+              name=""
+              id=""
+              class="border-none bg-slate-200"
+            />
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute rounded-lg right-32 h-44 w-48">
+            <label for="image"></label>
+            <input
+              formControlName="image"
+              type="file"
+              class="w-full opacity-0 h-full absolute"
+              accept="image/*"
+              name=""
+              (change)="onChange($event)"
+              id="image"
+            />
+            <img [src]="defaultImage" class="w-full h-full rounded-lg" alt="" />
+          </div>
+        </div>
+        <div formArrayName="caracteristique" class="flex flex-col py-5 mt-32">
+          <div
+            class="space-x-10 space-y-3"
+            *ngFor="let item of caracteristique.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <select
+              formControlName="caracteristique_id"
+              (change)="choixCaract($event, i)"
+              name=""
+              class="w-72 rounded-lg"
+              id=""
+            >
+              <option value="{{ ca.id }}" *ngFor="let ca of caracts">
+                {{ ca.libelle }}
+              </option>
+            </select>
+            <span
+              *ngIf="caracteristiques.value[i].bool && tabValue.length == 0"
+            >
+              <input formControlName="valeur" type="text" class="w-72" />
+            </span>
+            <span
+              *ngIf="caracteristiques.value[i].bool && tabValue.length != 0"
+            >
+              <select formControlName="valeur" name="" id="" class="w-72">
+                <option value="{{ tab }}" *ngFor="let tab of tabValue">
+                  {{ tab }}
+                </option>
+              </select>
+            </span>
+            <div>
+              
+            </div>
+            <select
+              formControlName="unite"
+              name=""
+              class="w-72 rounded-lg"
+              id=""
+            >
+              <option value="{{ unite.id }}" *ngFor="let unite of unites">
+                {{ unite.libelle }}
+              </option>
+            </select>
+            <span
+              (click)="deleteCaract(i)"
+              class="text-2xl px-3 py-1 border-2 rounded-lg border-black cursor-pointer"
+              >x</span
+            >
+          </div>
+        </div>
+        <div class="flex justify-end py-2">
+          <button
+            (click)="addRow()"
+            class="rounded-lg p-3 mr-[4em] bg-gray-600 text-white text-xl"
+          >
+            Ajouter une caractéristique
+          </button>
+        </div>
+        <hr class="bg-slate-300 h-0.5" />
+        <div class="flex space-x-2 mt-5 justify-end">
+          <button
+            type="button"
+            class="px-3 py-2 text-white rounded-lg bg-red-500"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            (click)="onSubmit()"
+            class="px-3 py-2 text-white rounded-lg bg-green-500"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

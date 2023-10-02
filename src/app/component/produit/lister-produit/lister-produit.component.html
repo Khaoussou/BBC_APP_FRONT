@@ -1,0 +1,102 @@
+<div class="bg-slate-400 h-[90vh] p-10 mt-16">
+  <div class="flex justify-between p-3">
+    <div class="nbrPro text-2xl">Nombre de produit : {{ produits.length }}</div>
+    <div class="qte text-2xl">Quantite en stock : {{ qte }}</div>
+  </div>
+  <div class="bg-slate-300 rounded-xl p-10">
+    <div class="flex justify-center space-x-10">
+      <label for="" class="text-lg">Rechercher par : </label>
+      <select name="" class="w-96 border-none" id="">
+        <option
+          *ngFor="let prod of produits"
+          value="{{ prod.id }}"
+          class="text-lg"
+        >
+          {{ prod.libelle }}
+        </option>
+      </select>
+      <input type="text" class="w-96 border-none" />
+      <button class="bg-sky-400 text-white px-3 rounded-lg text-lg">
+        Rechercher
+      </button>
+    </div>
+    <div class="flex p-10 justify-between">
+      <div class="space-x-1 text-lg">
+        <span>Show</span>
+        <span>
+          <select name="" (change)="choix($event)" id="" class="cursor-pointer h-9">
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </span>
+        <span>entries</span>
+      </div>
+      <div class="space-x-1 text-lg">
+        <label for="" class="">Search : </label>
+        <input type="text" />
+      </div>
+    </div>
+    <div class="px-10 h-1/3">
+      <table class="w-full">
+        <thead class="p-3">
+          <tr class="flex justify-between w-full text-lg">
+            <th class="px-3 py-3">Photo</th>
+            <th class="px-3 py-3">Code</th>
+            <th class="px-3 py-3">Produit</th>
+            <th class="px-3 py-3">Prix</th>
+            <th class="px-3 py-3">Quantité</th>
+            <th class="px-3 py-3">
+              <a href="/add">
+                <button
+                  class="bg-slate-500 text-lg text-white px-3 py-1 rounded-lg"
+                >
+                  Ajouter
+                </button>
+              </a>
+            </th>
+          </tr>
+          <hr class="bg-slate-950 h-1" />
+        </thead>
+        <tbody class="p-3">
+          <tr
+            class="flex justify-between items-center text-lg shadow-lg"
+            *ngFor="
+              let produit of produits
+                | paginate : { itemsPerPage: itemsPerPage, currentPage: p }
+            "
+          >
+            <td class="px-3 py-3">
+              <img src="{{ produit.image }}" class="w-20 rounded" alt="" />
+            </td>
+            <td class="px-3 py-3">{{ produit.code }}</td>
+            <td class="px-3 py-3">{{ produit.libelle }}</td>
+            <td class="px-3 py-3">{{ produit.prixUnitaire }}</td>
+            <td class="px-3 py-3">{{ produit.quantite }}</td>
+            <td class="px-3 py-3">
+              <div class="flex space-x-2">
+                <button
+                  id="{{ produit.id }}"
+                  class="px-2 py-1 text-white rounded bg-sky-400"
+                >
+                  Détail
+                </button>
+                <button
+                  id="{{ produit.id }}"
+                  class="px-2 py-1 rounded bg-yellow-100"
+                >
+                  Edit
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="text-xl p-2 mt-2 flex justify-between">
+    <div>
+      Showing 1 of {{ p }}
+    </div>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>

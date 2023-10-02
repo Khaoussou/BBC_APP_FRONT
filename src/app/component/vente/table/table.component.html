@@ -1,0 +1,205 @@
+<div class="flex justify-between w-[70%] px-2 py-2">
+  <div class="w-32 p-4 rounded">
+    <img src="#" alt="" />
+  </div>
+  <div class="flex text-xl items-center justify-center">
+    <span>Stock: </span>
+  </div>
+</div>
+<div class="flex flex-col h-[72vh]">
+  <div class="h-3/4 shadow-md text-2xl">
+    <form [formGroup]="form" action="">
+      <table
+        formArrayName="produits"
+        class="w-full h-full text-2xl text-left text-gray-500 dark:text-gray-400"
+      >
+        <thead class="text-xs h-1/3 text-gray-700 uppercase dark:text-gray-400">
+          <tr class="text-2xl">
+            <th scope="col" class="px-6 py-3">
+              <span class="sr-only">Image</span>
+            </th>
+            <th scope="col" class="px-6 py-3">Product</th>
+            <th scope="col" class="px-6 py-3">Qty</th>
+            <th scope="col" class="px-6 py-3">Price</th>
+            <th scope="col" class="px-6 py-3">Total</th>
+            <th scope="col" class="px-6 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody class="h-2/3">
+          <tr
+            *ngFor="let item of produits.controls; let i = index"
+            class="bg-slate-300 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+          >
+            <td [formGroupName]="i" class="w-32 p-4 rounded">
+              <img
+                src="{{ produitCommande.value[i].image }}"
+                alt="Apple Watch"
+                class="rounded-2xl"
+              />
+            </td>
+            <td
+              [formGroupName]="i"
+              class="px-6 py-4 font-semibold text-gray-9i dark:text-white"
+            >
+              {{ produitCommande.value[i].nom }}
+            </td>
+            <td [formGroupName]="i" class="px-6 py-4">
+              <div class="flex items-center space-x-3">
+                <div>
+                  <input
+                    type="number"
+                    id="first_product"
+                    (input)="valueQte($event, i)"
+                    value="{{ produitCommande.value[i].qte_commande }}"
+                    class="bg-gray-50 w-20 border text-lg border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+              </div>
+            </td>
+            <td
+              [formGroupName]="i"
+              class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
+            >
+              {{ produitCommande.value[i].prix_vente + " " + "Fcfa" }}
+            </td>
+            <td
+              #total
+              [formGroupName]="i"
+              class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
+            >
+              {{
+                produitCommande.value[i].prix_vente *
+                  produitCommande.value[i].qte_commande +
+                  " " +
+                  "Fcfa"
+              }}
+            </td>
+            <td>
+              <button
+                type="button"
+                class="bg-red-600 text-white p-1 rounded-lg"
+                (click)="deleteArtConf(i)"
+              >
+                Remove
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="h-1/4 ml-40 flex justify-evenly items-center">
+    <div class="flex">
+      <label for="" class="bg-red-600 p-5 text-white text-xl rounded-l-lg"
+        >Remise</label
+      >
+      <input
+        type="number"
+        [(ngModel)]="mont"
+        min="0"
+        max="100"
+        name="mont"
+        (input)="remise($event)"
+        placeholder="0"
+        class="w-36 text-2xl rounded-r-lg"
+      />
+    </div>
+    <div class="flex">
+      <label for="" class="bg-green-600 p-5 text-white text-xl rounded-l-lg"
+        >Montant</label
+      >
+      <input
+        #input
+        type="text"
+        value="{{ montant + ' ' + 'Fcfa' }}"
+        placeholder="0 Fcfa"
+        class="rounded-r-lg text-2xl"
+      />
+    </div>
+    <div class="flex">
+      <button
+        type="button"
+        (click)="block()"
+        class="rounded-lg inline-flex items-center bg-gray-600 p-5 text-white text-xl"
+      >
+        Suivant
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div
+    #modal
+    class="modal absolute top-0 bg-gray-500 opacity-[0.9] w-screen h-screen"
+  >
+    <div
+      class="bg-white absolute top-[20%] z-10 left-[18%] w-[50%] h-[50%] body-modal flex justify-center items-center"
+    >
+      <form action="" class="space-y-5 w-full h-full">
+        <div class="bg-slate-950">
+          <h3 class="text-2xl text-white p-5 font-semibold">
+            Terminer la vente
+          </h3>
+        </div>
+        <div class="space-y-5 flex flex-col justify-center items-center">
+          <div class="flex justify-between w-[35%]">
+            <span
+              for=""
+              class="text-xl text-green-400 font-semibold rounded-l-lg p-3"
+              >Net à payer :
+            </span>
+            <span
+              #spanMont
+              class="text-xl text-green-400 font-semibold rounded-l-lg p-3"
+              >{{ valeur }}</span
+            >
+          </div>
+          <div class="flex justify-start w-[40%]">
+            <label
+              for=""
+              class="text-lg font-semibold rounded-l-lg text-white bg-yellow-400 p-3"
+              >Montant encaissé</label
+            >
+            <input
+              (input)="rendue($event)"
+              class="text-lg w-[61%] rounded-r-lg"
+              min="0"
+              type="number"
+            />
+          </div>
+          <div class="flex justify-end w-[35%]">
+            <span
+              for=""
+              class="text-lg text-red-500 font-semibold rounded-l-lg p-3"
+              >Rendu :
+            </span>
+            <span
+              #spanRendue
+              class="text-lg text-red-500 font-semibold rounded-l-lg p-3"
+            ></span>
+          </div>
+        </div>
+        <hr class="h-1" />
+        <div class="flex justify-end space-x-4 text-white mr-20 font-semibold">
+          <button
+            type="submit"
+            (click)="none()"
+            class="p-3 rounded-lg bg-red-500"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            (click)="message()"
+            class="p-3 rounded-lg bg-green-500"
+          >
+            Terminer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
